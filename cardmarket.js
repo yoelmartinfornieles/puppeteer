@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 
 (async () => {
 	//initialize the browser
-	const browser = await puppeteer.launch({headless: false});
+	const browser = await puppeteer.launch({headless: true});
 	//open a page
 	const page = await browser.newPage();
 
@@ -40,5 +40,36 @@ const puppeteer = require('puppeteer');
 	await page.waitForSelector('#image');
 
 	await page.waitForSelector('[data-toggle=tooltip]')
-/* 	await browser.close();
- */})();
+
+	let cardData = {}
+
+	cardData.cheapestPrice = await page.evaluate(() => {
+		let element = document.querySelectorAll('#tabContent-info > div > div:nth-child(2) > div > div:nth-child(2) > dl > dd:nth-child(12)')
+		return element[0].innerText;
+	})
+
+	cardData.futurePrice = await page.evaluate(() => {
+		let element = document.querySelectorAll('#tabContent-info > div > div:nth-child(2) > div > div:nth-child(2) > dl > dd:nth-child(14)')
+		return element[0].innerText;
+	})
+
+	cardData.averagePrice30 = await page.evaluate(() => {
+		let element = document.querySelectorAll('#tabContent-info > div > div:nth-child(2) > div > div:nth-child(2) > dl > dd:nth-child(16)')
+		return element[0].innerText;
+	})
+
+	cardData.averagePrice7 = await page.evaluate(() => {
+		let element = document.querySelectorAll('#tabContent-info > div > div:nth-child(2) > div > div:nth-child(2) > dl > dd:nth-child(18)')
+		return element[0].innerText;
+	})
+
+	cardData.averagePrice1 = await page.evaluate(() => {
+		let element = document.querySelectorAll('#tabContent-info > div > div:nth-child(2) > div > div:nth-child(2) > dl > dd:nth-child(20)')
+		return element[0].innerText;
+	})
+	
+
+	console.log('jorl: ', cardData)
+
+	await browser.close();
+})();
