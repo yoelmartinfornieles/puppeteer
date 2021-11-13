@@ -43,6 +43,18 @@ const puppeteer = require('puppeteer');
 
 	let cardData = {}
 
+	cardData.name = await page.evaluate(() => {
+		let element = document.querySelectorAll('.page-title-container.d-flex.align-items-center.text-break > div > h1')
+		let title = element[0].innerHTML
+		console.log(typeof title)
+		return title.split('<')[0];
+	})
+
+	cardData.printedIn = await page.evaluate(() => {
+		let element = document.querySelectorAll('.page-title-container.d-flex.align-items-center.text-break > div > h1 > span')
+		return element[0].innerHTML;
+	})
+
 	cardData.cheapestPrice = await page.evaluate(() => {
 		let element = document.querySelectorAll('#tabContent-info > div > div:nth-child(2) > div > div:nth-child(2) > dl > dd:nth-child(12)')
 		return element[0].innerText;
@@ -69,7 +81,7 @@ const puppeteer = require('puppeteer');
 	})
 	
 
-	console.log('jorl: ', cardData)
+	console.log('cardData: ', cardData)
 
 	await browser.close();
 })();
